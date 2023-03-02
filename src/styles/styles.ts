@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 
 type Props = {
-  structure?: boolean
+  marginLeft?: boolean
+  marginRight?: boolean
   text?: boolean
-  sub?: boolean
 }
 
 export const Wrapper = styled.div`
@@ -11,68 +11,72 @@ export const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  padding: 20px;
+  padding: 50px;
+  font-family: 'Neucha', cursive;
 `
+
+/**
+ * TEXT
+ */
+
+export const Text = styled.span<Props>`
+  color: ${props => props.text ? '#fff' : '#000'};
+  padding-left: ${props => props.text ? '0px' : '15px'};
+  font-size: ${props => props.text ? '25px' : '20px'};
+  font-weight: bold;
+`
+
+/**
+ * CONTAINER LEFT
+ */
 
 export const ContainerLeft = styled.div`
   width: 100%;
   height: 100%;
   display: column;
-  font-family: 'Neucha', cursive;
 `
 
-export const BlockTop = styled.div`
-  height: 50%;
-  display: flex;
-  padding: 35px 0;
-`
+/**
+ * CONTAINER BLOCK TOP
+ */
 
-export const BlockTopLeft = styled.div`
-  flex: 1;
-  margin-right: 2.5px;
-`
-
-export const BlockTopRight = styled.div`
-  flex: 1;
-  margin-left: 2.5px;
-`
-
-export const BlockText = styled.div<Props>`
-  display: ${props => props.text ? 'flex' : ''};
-  justify-content: ${props => props.text ? 'center' : ''};
-  align-items: ${props => props.text ? 'center' : ''};
-  padding-left: ${props => props.text ? '' : '6px'};
-  margin-top: 5px;
-`
-
-export const Text = styled.span<Props>`
-  color: #fff;
-  font-size: ${props => props.text ? '18px' : '25px'};
-  font-weight: ${props => props.text ? '' : 'bold'};
-  margin-left: ${props => props.sub ? '10px' : '0'};
-`
-
-export const Block = styled.div<Props>`
-  background: ${props => props.structure ? 'rgb(0, 200, 230)' : ''};
+export const ContainerBlockTop = styled.div`
   width: 100%;
-  height: 88%;
-  padding: 15px 15px 0 0;
-  border: ${props => props.structure ? 'dashed 1px' : ''};
+  height: 40%;
+  display: flex;
+`
+
+export const BlockTop = styled.div<Props>`
+  flex: 1;
+  margin-right: ${props => props.marginRight && '5px'};
+  margin-left: ${props => props.marginLeft && '5px'};
+`
+
+export const Block = styled.div`
+  width: 100%;
+  height: 100%;
+  display: block;
+`
+
+export const BlockText = styled.div`
+  height: 20%;
 `
 
 export const BlockResource = styled.div`
-  width: 100%;
-  height: 100%;
+  height: 80%;
 `
 
 export const Resource = styled.div`
   background: #fad643;
   width: 175px;
   padding: 5px;
-  margin: 5px;
   border-radius: 12px;
   border: 1.5px solid black;
   transition: 0.2s;
+
+  &+& {
+    margin-top: 5px;
+  }
 
   &:hover {
     box-shadow: 0 0 5px black;
@@ -80,47 +84,119 @@ export const Resource = styled.div`
   }
 `
 
-export const TextResource = styled.span`
-  padding-left: 15px;
-  font-size: 22px;
-  font-weight: bold;
-`
-
-export const BlockDown = styled.div`
-  width: 100%;
-  height: 50%;
-  display: flex;
-  margin-top: 50px;
-`
-
 export const BlockSelects = styled.div`
   width: 100%;
 `
 
-export const SelectLeft = styled.form`
-  margin: 20px 10px 0 10px;
+/**
+ * CONTAINER BLOCK CENTER
+ */
+
+export const ContainerBlockCenter = styled.div`
+  background: rgb(0, 200, 230);
+  width: 100%;
+  height: 50%;
+  display: flex;
+  border: 1px dashed;
 `
 
-export const SelectRight = styled.form`
-  margin: 20px 30px 0 0;
+export const BlockCenterItems = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 20px;
 `
 
-export const ContainerRight = styled.div`
+export const BlockCenterText = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Neucha', cursive;
-  font-size: 20px;
+`
+
+/**
+ * CONTAINER CONTAINER BOTTOM
+ */
+
+export const ContainerBlockBottom = styled.div`
+  width: 100%;
+  height: 10%;  
+`
+
+export const Ol = styled.ol`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-left: 15px;
+`
+
+export const Li = styled.li`
+  color: #fff;
+  font-size: 15px;
+`
+
+/**
+ * CONTAINER RIGHT
+ */
+
+export const ContainerRight = styled.div`
+  width: 100%;
+  height: 100%;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
 `
 
 export const ContainerScript = styled.div`
-  /* background: #ede7e3; */
-  width: 90%;
-  height: 92%;
+  width: 100%;
+  height: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: dashed 1px ;
+  border: 1px dashed;
+  font-size: 20px;
+`
+
+export const Form = styled.form`
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+`
+
+export const Button = styled.button`
+  background: #fad643;
+  color: #000;
+  width: 200px;
+  height: 50px;
+  border-radius: 0.5rem;
+  border: 1px solid #000;
+  font-size: 1.3rem;
+  font-weight: bold;
+  transition: filter 0.2s;
+  cursor: ${props => props.disabled ? 'pointer' : 'not-allowed'};
+
+  &:hover {
+    filter: ${props => props.disabled ? 'brightness(0.9)' : ''};
+  }
+`
+
+export const Download = styled.button`
+  background: red;
+  color: #fff;
+  width: 200px;
+  height: 50px;
+  border-radius: 0.5rem;
+  border: 1px solid #000;
+  font-size: 1.3rem;
+  font-weight: bold;
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
 `

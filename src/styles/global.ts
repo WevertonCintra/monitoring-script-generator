@@ -9,14 +9,10 @@ export const Global = createGlobalStyle`
 
   body {
     -webkit-font-smoothing: antialiased;
-    scrollbar-width: thin;
-    overflow-x: hidden;
+    /* scrollbar-width: thin; */
+    /* overflow-x: hidden; */
   }
-
-  button {
-    cursor: pointer;
-  }
-
+/*   
   ::-webkit-scrollbar {
     height: 12px;
     width: 5px;
@@ -25,5 +21,5 @@ export const Global = createGlobalStyle`
 
   ::-webkit-scrollbar-thumb {
     background: #5f5f5f;
-  }
+  } */
 `
