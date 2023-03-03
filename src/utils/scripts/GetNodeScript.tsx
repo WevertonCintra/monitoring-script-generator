@@ -1,35 +1,59 @@
 import { Resources } from '../options/Resources'
-import { Techs } from '../options/Techs'
-import { Intervals } from '../options/Intervals'
 
 type Props = {
-	intervalId?: number
-	resourceId: number
-	techId?: number
+	resources: typeof Resources
+	time: number
 }
 
-export function GetNodeScript({ intervalId, resourceId, techId }: Props) {
-	const resources = Resources.filter((resource) => resource.value === resourceId)
-	const interval = Intervals.find((interval) => interval.value === intervalId)
-	const tech = Techs.find((tech) => tech.value === techId)
+export function GetNodeScript({ resources, time }: Props) {
+	let cpu: string = ''
+	let memory: string = ''
+	let hardDrive: string = ''
+	let network: string = ''
 
-	console.log(resourceId)
-	console.log(resources)
-
-	resources.map((resource) => {
-		if (resource?.label === 'CPU') {
-			const cpuTotalKernel = `cpus().length`
-
-			console.log('cpuTotalKernel', cpuTotalKernel)
-
-			return cpuTotalKernel
+	resources.forEach((resource) => {
+		if (resource.label === 'CPU') {
+			cpu = `
+				// CPU
+				os.cpus()
+			`.trimStart()
 		} 
-		// else if (resource?.title === 'MEMORY') {
 
-		// } else if (resource?.title === 'HARD DRIVE') {
+		if (resource.label === 'MEMORY') {
+			memory = `
+				// MEMÓRIA RAM
+				os.totalmem - os.freemem
+				os.freemem()
+				os.totalmem()
+			`.trimStart()
+		}
 
-		// } else if (resource?.title === 'NETWORK') {
+		if (resource.label === 'HARD DRIVE') {
+			hardDrive = `
+				// HARD DRIVE
+				const disk = require('check-disk-space').default
+				disk('/').then(space => space.size)
+				disk('/').then(space => space.free)
+				disk('/').then(space => space.size-space.free)
+			`.trimStart()
+		} 
 
-		// }
+		if (resource.label === 'NETWORK') {
+			network = `
+			// NETWORK
+			os.networkInterface()
+			`.trimStart()
+		}
 	})
+
+	return `
+		const os = require('node:os')
+
+		for (let i = 0; i <= ${time}; i++) {
+			${cpu}
+			${memory}
+			${hardDrive}
+			${network}
+		}
+	`
 }

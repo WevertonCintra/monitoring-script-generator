@@ -4,6 +4,7 @@ type Props = {
   marginLeft?: boolean
   marginRight?: boolean
   text?: boolean
+  structure?: boolean
 }
 
 export const Wrapper = styled.div`
@@ -153,14 +154,31 @@ export const ContainerRight = styled.div`
 export const ContainerScript = styled.div`
   width: 100%;
   height: 90%;
+  border: 1px dashed;
+`
+
+export const ContainerScriptText = styled.div`
+  max-width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px dashed;
   font-size: 20px;
 `
 
-export const Form = styled.form`
+export const ContainerSyntaxHighlighter = styled.div`
+  width: 100%; 
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+/**
+ * BUTTONS
+ */
+
+export const ContainerButtons = styled.div`
   width: 100%;
   height: 10%;
   display: flex;
@@ -168,7 +186,9 @@ export const Form = styled.form`
   align-items: end;
 `
 
-export const Button = styled.button`
+export const Form = styled.form``
+
+export const GenerateScriptButton = styled.button`
   background: #fad643;
   color: #000;
   width: 200px;
@@ -178,25 +198,28 @@ export const Button = styled.button`
   font-size: 1.3rem;
   font-weight: bold;
   transition: filter 0.2s;
-  cursor: ${props => props.disabled ? 'pointer' : 'not-allowed'};
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 
   &:hover {
     filter: ${props => props.disabled ? 'brightness(0.9)' : ''};
   }
 `
 
-export const Download = styled.button`
-  background: red;
-  color: #fff;
+export const DownloadButton = styled.button`
+  background: transparent;
+  color: #FF0037;
   width: 200px;
   height: 50px;
   border-radius: 0.5rem;
-  border: 1px solid #000;
+  border: 1.2px solid red;
   font-size: 1.3rem;
   font-weight: bold;
   transition: filter 0.2s;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 
   &:hover {
-    filter: brightness(0.9);
+    background: ${props => props.disabled ? '' : '#FF0037'};
+    color: ${props => props.disabled ? '' : '#fff'};
+    filter: ${props => props.disabled ? '' : 'brightness(0.9)'};
   }
 `

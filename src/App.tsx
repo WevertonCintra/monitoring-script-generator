@@ -1,11 +1,16 @@
-import { useState, FormEvent, useEffect } from 'react'
+import { useState } from 'react'
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd'
 import CreatableSelect from 'react-select/creatable'
-import fileDownload from 'js-file-download'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism'
+// import fileDownload from 'js-file-download'
 import { GetIcon } from './utils/GetIcon'
 import { Resources } from './utils/options/Resources'
 import { Techs } from './utils/options/Techs'
-import { Intervals } from './utils/options/Intervals'
+import { Time } from './utils/options/Time'
+import { GetNodeScript } from './utils/scripts/GetNodeScript'
+import { GetPythonScript } from './utils/scripts/GetPythonScript'
+import { GetBashScript } from './utils/scripts/GetBashScript'
 import * as S from './styles/styles'
 
 type Props = {
@@ -13,34 +18,57 @@ type Props = {
   label: string
   type: string
   extension?: string
+  loop?: number
 }
 
 export function App() {
   const [standardResources, setStandardResources] = useState<Props[]>(Resources)
   const [selectedResources, setSelectedResources] = useState<Props[]>([])
-  const [scripts, setScripts] = useState<Props[]>([])
-  const [tech, setTech] = useState<String>('')
-  const [totalItem, setTotalItem] = useState<Number>(0)
-  const [isDisabled, setIsDisabled] = useState<Boolean>(true)
+  // const [resource, setResource] = useState<string>('')
+  const [tech, setTech] = useState<string>('')
+  const [time, setTime] = useState<number>(0)
+  const [codeString, setCodeString] = useState<string>('')
+  // const [totalItem, setTotalItem] = useState<number>(0)
+  // const [isDisabled, setIsDisabled] = useState<boolean>(false)
+  // const [generateScript, setGenerateScript] = useState<boolean>(false)
 
-  const handleDownload = () => {
-    const script = JSON.stringify(scripts)
-    console.log(script)
-    console.log(JSON.parse(script))
+  // const handleDownload = () => {
+  //   // fileDownload(JSON.stringify(script), `script.${tech}`)
+  //   // setScripts([])
+  // }
 
-    // fileDownload(JSON.stringify(script), `script.${tech}`)
-    // setScripts([])
-  }
-
-  const handleGeneratorScript = (event: FormEvent) => {
-    event.preventDefault()
-  }
+  // const handleGeneratorScript = () => {
+  //   setGenerateScript(true)
+  // }
 
   const handleChangeItem = (selectedItem: any) => {
-    setTech('')
-    setScripts([...scripts, selectedItem])
-    setTech(selectedItem?.extension)
-    setIsDisabled(false)
+    if (selectedItem?.type === 'tech' && selectedItem?.label !== tech) {
+      setTech('')
+      setTech(selectedItem?.extension)
+    }
+
+    if (selectedItem?.type === 'time' && selectedItem?.loop !== time) {
+      console.log('aqui', selectedItem?.loop)
+      setTime(selectedItem?.loop)
+    }
+
+    if (tech === 'js') {
+      setCodeString(GetNodeScript({ resources: selectedResources, time }))
+    }
+
+    if (tech === 'py') {
+      setCodeString(GetPythonScript({ resources: selectedResources, time }))
+    }
+
+    if (tech === 'bash') {
+      setCodeString(GetBashScript({ resources: selectedResources, time }))
+    }
+
+    // setScripts([...scripts, selectedItem])
+
+    // if (totalItem >= 3 ) {
+      // setIsDisabled(true)
+    // }
   }
 
   const onDragEnd = ({ source, destination }: DropResult) => {  
@@ -72,11 +100,11 @@ export function App() {
     } else {
       complete.splice(destination.index, 0, add)
     }
+
+    complete.map((c) => handleChangeItem(c))
     
     setSelectedResources(complete)
     setStandardResources(active)
-
-    complete.map((c) => handleChangeItem(c))
   }
 
   return (
@@ -142,7 +170,7 @@ export function App() {
               <S.BlockSelects>
                 <CreatableSelect
                   isClearable
-                  options={Intervals}
+                  options={Time}
                   onChange={handleChangeItem}
                 />
               </S.BlockSelects>
@@ -190,24 +218,47 @@ export function App() {
 
         <S.ContainerRight>
           <S.ContainerScript>
-            <S.Text>nenhum script gerado ...</S.Text> 
-
-            {/* {selectedResources?.map((resource) => (
-              <S.Text key={resource.id}>{GetNodeScript({ resourceId: resource.id })}</S.Text>
-            ))} */}
+            {codeString 
+              ? (
+                tech === 'js' ? (
+                  <S.ContainerSyntaxHighlighter>
+                    <SyntaxHighlighter 
+                      showLineNumbers
+                      startingLineNumber={1}
+                      style={darcula} 
+                      customStyle={{ 
+                        position: 'static',
+                        width: '100%', 
+                        height: '100%',
+                        border: '5px solid #fff' 
+                      }}
+                    >
+                      {codeString}
+                    </SyntaxHighlighter>
+                  </S.ContainerSyntaxHighlighter>
+                )
+                : (
+                  tech === 'py' ? (
+                    <S.ContainerScriptText>
+                      <S.Text>py</S.Text> 
+                    </S.ContainerScriptText>
+                  ) : (
+                    <S.ContainerScriptText>
+                      <S.Text>bash</S.Text> 
+                    </S.ContainerScriptText>
+                  )
+                )
+              ) : (
+                <S.ContainerScriptText>
+                  <S.Text>nenhum script gerado ...</S.Text> 
+                </S.ContainerScriptText>
+              )}
           </S.ContainerScript>
 
-          <S.Form 
-            onSubmit={(event) => {
-              handleGeneratorScript(event)
-            }}
-          >
-            <S.Button type='submit' disabled={!isDisabled}>Gerar Script</S.Button>
-
-            {tech && (
-              <S.Download onClick={() => handleDownload()}>Baixar scripts</S.Download>
-            )}
-          </S.Form>
+          <S.ContainerButtons>
+            {/* <S.GenerateScriptButton disabled={false} onClick={() => {handleGeneratorScript()}}>Gerar Script</S.GenerateScriptButton> */}
+            {/* <S.DownloadButton disabled={true} onClick={() => {}}>Baixar Scripts</S.DownloadButton> */}
+          </S.ContainerButtons>
         </S.ContainerRight>
       </S.Wrapper>
     </DragDropContext>
