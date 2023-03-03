@@ -28,7 +28,7 @@ export function App() {
   const [tech, setTech] = useState<string>('')
   const [time, setTime] = useState<number>(0)
   const [codeString, setCodeString] = useState<string>('')
-  // const [totalItem, setTotalItem] = useState<number>(0)
+  const [totalItem, setTotalItem] = useState<number>(0)
   // const [isDisabled, setIsDisabled] = useState<boolean>(false)
   // const [generateScript, setGenerateScript] = useState<boolean>(false)
 
@@ -48,7 +48,6 @@ export function App() {
     }
 
     if (selectedItem?.type === 'time' && selectedItem?.loop !== time) {
-      console.log('aqui', selectedItem?.loop)
       setTime(0)
       setTime(selectedItem?.loop)
     }
@@ -65,11 +64,16 @@ export function App() {
       setCodeString(GetBashScript({ resources: selectedResources, time }))
     }
 
-    // setScripts([...scripts, selectedItem])
-
     // if (totalItem >= 3 ) {
       // setIsDisabled(true)
     // }
+
+    if (selectedResources.length && tech && time) {
+      setTotalItem(3)
+    } else {
+      setTotalItem(0)
+      setCodeString('')
+    }
   }
 
   const onDragEnd = ({ source, destination }: DropResult) => {  
@@ -219,7 +223,7 @@ export function App() {
 
         <S.ContainerRight>
           <S.ContainerScript>
-            {codeString 
+            {totalItem === 3 && codeString
               ? (
                 <S.ContainerSyntaxHighlighter>
                   <SyntaxHighlighter 
