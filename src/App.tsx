@@ -49,6 +49,7 @@ export function App() {
 
     if (selectedItem?.type === 'time' && selectedItem?.loop !== time) {
       console.log('aqui', selectedItem?.loop)
+      setTime(0)
       setTime(selectedItem?.loop)
     }
 
@@ -220,34 +221,21 @@ export function App() {
           <S.ContainerScript>
             {codeString 
               ? (
-                tech === 'js' ? (
-                  <S.ContainerSyntaxHighlighter>
-                    <SyntaxHighlighter 
-                      showLineNumbers
-                      startingLineNumber={1}
-                      style={darcula} 
-                      customStyle={{ 
-                        position: 'static',
-                        width: '100%', 
-                        height: '100%',
-                        border: '5px solid #fff' 
-                      }}
-                    >
-                      {codeString}
-                    </SyntaxHighlighter>
-                  </S.ContainerSyntaxHighlighter>
-                )
-                : (
-                  tech === 'py' ? (
-                    <S.ContainerScriptText>
-                      <S.Text>py</S.Text> 
-                    </S.ContainerScriptText>
-                  ) : (
-                    <S.ContainerScriptText>
-                      <S.Text>bash</S.Text> 
-                    </S.ContainerScriptText>
-                  )
-                )
+                <S.ContainerSyntaxHighlighter>
+                  <SyntaxHighlighter 
+                    showLineNumbers
+                    startingLineNumber={1}
+                    style={darcula} 
+                    customStyle={{ 
+                      position: 'static',
+                      width: '100%', 
+                      height: '100%',
+                      border: '5px solid #fff' 
+                    }}
+                  >
+                    {codeString}
+                  </SyntaxHighlighter>
+                </S.ContainerSyntaxHighlighter>
               ) : (
                 <S.ContainerScriptText>
                   <S.Text>nenhum script gerado ...</S.Text> 
